@@ -168,6 +168,23 @@ typedef enum
 } ads111x_comp_queue_t;
 
 /**
+ * Device descriptor
+ */
+typedef struct {
+    i2c_dev_t i2c_dev;
+    ads111x_gain_t gain;
+    ads111x_mux_t mux;
+    ads111x_data_rate_t data_rate;
+    ads111x_mode_t mode;
+    ads111x_comp_mode_t comp_mode;
+    ads111x_comp_polarity_t comp_polarity;
+    ads111x_comp_latch_t comp_latch;
+    ads111x_comp_queue_t comp_queue;
+    int16_t high_th;
+    int16_t low_th;
+} ads111x_t;
+
+/**
  * @brief Initialize device descriptor
  *
  * @param dev Device descriptor
@@ -177,7 +194,7 @@ typedef enum
  * @param scl_gpio GPIO pin for SCL
  * @return `ESP_OK` on success
  */
-esp_err_t ads111x_init_desc(i2c_dev_t *dev, uint8_t addr, i2c_port_t port,
+esp_err_t ads111x_init_desc(ads111x_t *dev, uint8_t addr, i2c_port_t port,
                             gpio_num_t sda_gpio, gpio_num_t scl_gpio);
 
 /**
@@ -186,7 +203,7 @@ esp_err_t ads111x_init_desc(i2c_dev_t *dev, uint8_t addr, i2c_port_t port,
  * @param dev Device descriptor
  * @return `ESP_OK` on success
  */
-esp_err_t ads111x_free_desc(i2c_dev_t *dev);
+esp_err_t ads111x_free_desc(ads111x_t *dev);
 
 /**
  * @brief Get device operational status
@@ -195,7 +212,7 @@ esp_err_t ads111x_free_desc(i2c_dev_t *dev);
  * @param[out] busy True when device performing conversion
  * @return `ESP_OK` on success
  */
-esp_err_t ads111x_is_busy(i2c_dev_t *dev, bool *busy);
+esp_err_t ads111x_is_busy(ads111x_t *dev, bool *busy);
 
 /**
  * @brief Begin a single conversion
@@ -205,7 +222,7 @@ esp_err_t ads111x_is_busy(i2c_dev_t *dev, bool *busy);
  * @param dev Device descriptor
  * @return `ESP_OK` on success
  */
-esp_err_t ads111x_start_conversion(i2c_dev_t *dev);
+esp_err_t ads111x_start_conversion(ads111x_t *dev);
 
 /**
  * @brief Read last conversion result
@@ -214,7 +231,7 @@ esp_err_t ads111x_start_conversion(i2c_dev_t *dev);
  * @param[out] value Last conversion result
  * @return `ESP_OK` on success
  */
-esp_err_t ads111x_get_value(i2c_dev_t *dev, int16_t *value);
+esp_err_t ads111x_get_value(ads111x_t *dev, int16_t *value);
 
 /**
  * @brief Read last conversion result for ADS101x
@@ -223,7 +240,7 @@ esp_err_t ads111x_get_value(i2c_dev_t *dev, int16_t *value);
  * @param[out] value Last conversion result
  * @return `ESP_OK` on success
  */
-esp_err_t ads101x_get_value(i2c_dev_t *dev, int16_t *value);
+esp_err_t ads101x_get_value(ads111x_t *dev, int16_t *value);
 
 /**
  * @brief Read the programmable gain amplifier configuration
@@ -232,10 +249,9 @@ esp_err_t ads101x_get_value(i2c_dev_t *dev, int16_t *value);
  * Use ::ads111x_gain_values[] for real voltage.
  *
  * @param dev Device descriptor
- * @param[out] gain Gain value
  * @return `ESP_OK` on success
  */
-esp_err_t ads111x_get_gain(i2c_dev_t *dev, ads111x_gain_t *gain);
+esp_err_t ads111x_get_gain(ads111x_t *dev);
 
 /**
  * @brief Configure the programmable gain amplifier
@@ -246,7 +262,7 @@ esp_err_t ads111x_get_gain(i2c_dev_t *dev, ads111x_gain_t *gain);
  * @param gain Gain value
  * @return `ESP_OK` on success
  */
-esp_err_t ads111x_set_gain(i2c_dev_t *dev, ads111x_gain_t gain);
+esp_err_t ads111x_set_gain(ads111x_t *dev, ads111x_gain_t gain);
 
 /**
  * @brief Read the input multiplexer configuration
@@ -254,10 +270,9 @@ esp_err_t ads111x_set_gain(i2c_dev_t *dev, ads111x_gain_t gain);
  * ADS1115 only.
  *
  * @param dev Device descriptor
- * @param[out] mux Input multiplexer configuration
  * @return `ESP_OK` on success
  */
-esp_err_t ads111x_get_input_mux(i2c_dev_t *dev, ads111x_mux_t *mux);
+esp_err_t ads111x_get_input_mux(ads111x_t *dev);
 
 /**
  * @brief Configure the input multiplexer configuration
@@ -268,16 +283,15 @@ esp_err_t ads111x_get_input_mux(i2c_dev_t *dev, ads111x_mux_t *mux);
  * @param mux Input multiplexer configuration
  * @return `ESP_OK` on success
  */
-esp_err_t ads111x_set_input_mux(i2c_dev_t *dev, ads111x_mux_t mux);
+esp_err_t ads111x_set_input_mux(ads111x_t *dev, ads111x_mux_t mux);
 
 /**
  * @brief Read the device operating mode
  *
  * @param dev Device descriptor
- * @param[out] mode Device operating mode
  * @return `ESP_OK` on success
  */
-esp_err_t ads111x_get_mode(i2c_dev_t *dev, ads111x_mode_t *mode);
+esp_err_t ads111x_get_mode(ads111x_t *dev);
 
 /**
  * @brief Set the device operating mode
@@ -286,16 +300,15 @@ esp_err_t ads111x_get_mode(i2c_dev_t *dev, ads111x_mode_t *mode);
  * @param mode Device operating mode
  * @return `ESP_OK` on success
  */
-esp_err_t ads111x_set_mode(i2c_dev_t *dev, ads111x_mode_t mode);
+esp_err_t ads111x_set_mode(ads111x_t *dev, ads111x_mode_t mode);
 
 /**
  * @brief Read the data rate
  *
  * @param dev Device descriptor
- * @param[out] rate Data rate
  * @return `ESP_OK` on success
  */
-esp_err_t ads111x_get_data_rate(i2c_dev_t *dev, ads111x_data_rate_t *rate);
+esp_err_t ads111x_get_data_rate(ads111x_t *dev);
 
 /**
  * @brief Configure the data rate
@@ -304,7 +317,7 @@ esp_err_t ads111x_get_data_rate(i2c_dev_t *dev, ads111x_data_rate_t *rate);
  * @param rate Data rate
  * @return `ESP_OK` on success
  */
-esp_err_t ads111x_set_data_rate(i2c_dev_t *dev, ads111x_data_rate_t rate);
+esp_err_t ads111x_set_data_rate(ads111x_t *dev, ads111x_data_rate_t rate);
 
 /**
  * @brief Get comparator mode
@@ -312,10 +325,9 @@ esp_err_t ads111x_set_data_rate(i2c_dev_t *dev, ads111x_data_rate_t rate);
  * ADS1114 and ADS1115 only.
  *
  * @param dev Device descriptor
- * @param[out] mode Comparator mode
  * @return `ESP_OK` on success
  */
-esp_err_t ads111x_get_comp_mode(i2c_dev_t *dev, ads111x_comp_mode_t *mode);
+esp_err_t ads111x_get_comp_mode(ads111x_t *dev);
 
 /**
  * @brief Set comparator mode
@@ -326,7 +338,7 @@ esp_err_t ads111x_get_comp_mode(i2c_dev_t *dev, ads111x_comp_mode_t *mode);
  * @param mode Comparator mode
  * @return `ESP_OK` on success
  */
-esp_err_t ads111x_set_comp_mode(i2c_dev_t *dev, ads111x_comp_mode_t mode);
+esp_err_t ads111x_set_comp_mode(ads111x_t *dev, ads111x_comp_mode_t mode);
 
 /**
  * @brief Get polarity of the comparator output pin ALERT/RDY
@@ -334,10 +346,9 @@ esp_err_t ads111x_set_comp_mode(i2c_dev_t *dev, ads111x_comp_mode_t mode);
  * ADS1114 and ADS1115 only.
  *
  * @param dev Device descriptor
- * @param[out] polarity Comparator output pin polarity
  * @return `ESP_OK` on success
  */
-esp_err_t ads111x_get_comp_polarity(i2c_dev_t *dev, ads111x_comp_polarity_t *polarity);
+esp_err_t ads111x_get_comp_polarity(ads111x_t *dev);
 
 /**
  * @brief Set polarity of the comparator output pin ALERT/RDY
@@ -348,7 +359,7 @@ esp_err_t ads111x_get_comp_polarity(i2c_dev_t *dev, ads111x_comp_polarity_t *pol
  * @param polarity Comparator output pin polarity
  * @return `ESP_OK` on success
  */
-esp_err_t ads111x_set_comp_polarity(i2c_dev_t *dev, ads111x_comp_polarity_t polarity);
+esp_err_t ads111x_set_comp_polarity(ads111x_t *dev, ads111x_comp_polarity_t polarity);
 
 /**
  * @brief Get comparator output latch mode
@@ -356,10 +367,9 @@ esp_err_t ads111x_set_comp_polarity(i2c_dev_t *dev, ads111x_comp_polarity_t pola
  * ADS1114 and ADS1115 only.
  *
  * @param dev Device descriptor
- * @param[out] latch Comparator output latch mode
  * @return `ESP_OK` on success
  */
-esp_err_t ads111x_get_comp_latch(i2c_dev_t *dev, ads111x_comp_latch_t *latch);
+esp_err_t ads111x_get_comp_latch(ads111x_t *dev);
 
 /**
  * @brief Set comparator output latch mode
@@ -370,7 +380,7 @@ esp_err_t ads111x_get_comp_latch(i2c_dev_t *dev, ads111x_comp_latch_t *latch);
  * @param latch Comparator output latch mode
  * @return `ESP_OK` on success
  */
-esp_err_t ads111x_set_comp_latch(i2c_dev_t *dev, ads111x_comp_latch_t latch);
+esp_err_t ads111x_set_comp_latch(ads111x_t *dev, ads111x_comp_latch_t latch);
 
 /**
  * @brief Get comparator queue size
@@ -379,10 +389,9 @@ esp_err_t ads111x_set_comp_latch(i2c_dev_t *dev, ads111x_comp_latch_t latch);
  * assertion. ADS1114 and ADS1115 only.
  *
  * @param dev Device descriptor
- * @param[out] queue Number of the comparator conversions
  * @return `ESP_OK` on success
  */
-esp_err_t ads111x_get_comp_queue(i2c_dev_t *dev, ads111x_comp_queue_t *queue);
+esp_err_t ads111x_get_comp_queue(ads111x_t *dev);
 
 /**
  * @brief Set comparator queue size
@@ -394,16 +403,15 @@ esp_err_t ads111x_get_comp_queue(i2c_dev_t *dev, ads111x_comp_queue_t *queue);
  * @param queue Number of the comparator conversions
  * @return `ESP_OK` on success
  */
-esp_err_t ads111x_set_comp_queue(i2c_dev_t *dev, ads111x_comp_queue_t queue);
+esp_err_t ads111x_set_comp_queue(ads111x_t *dev, ads111x_comp_queue_t queue);
 
 /**
  * @brief Get the lower threshold value used by comparator
  *
  * @param dev Device descriptor
- * @param[out] th Lower threshold value
  * @return `ESP_OK` on success
  */
-esp_err_t ads111x_get_comp_low_thresh(i2c_dev_t *dev, int16_t *th);
+esp_err_t ads111x_get_comp_low_thresh(ads111x_t *dev);
 
 /**
  * @brief Set the lower threshold value used by comparator
@@ -412,16 +420,15 @@ esp_err_t ads111x_get_comp_low_thresh(i2c_dev_t *dev, int16_t *th);
  * @param th Lower threshold value
  * @return `ESP_OK` on success
  */
-esp_err_t ads111x_set_comp_low_thresh(i2c_dev_t *dev, int16_t th);
+esp_err_t ads111x_set_comp_low_thresh(ads111x_t *dev, int16_t th);
 
 /**
  * @brief Get the upper threshold value used by comparator
  *
  * @param dev Device descriptor
- * @param[out] th Upper threshold value
  * @return `ESP_OK` on success
  */
-esp_err_t ads111x_get_comp_high_thresh(i2c_dev_t *dev, int16_t *th);
+esp_err_t ads111x_get_comp_high_thresh(ads111x_t *dev);
 
 /**
  * @brief Set the upper threshold value used by comparator
@@ -430,7 +437,7 @@ esp_err_t ads111x_get_comp_high_thresh(i2c_dev_t *dev, int16_t *th);
  * @param th Upper threshold value
  * @return `ESP_OK` on success
  */
-esp_err_t ads111x_set_comp_high_thresh(i2c_dev_t *dev, int16_t th);
+esp_err_t ads111x_set_comp_high_thresh(ads111x_t *dev, int16_t th);
 
 #ifdef __cplusplus
 }
