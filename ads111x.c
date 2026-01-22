@@ -44,7 +44,7 @@
 #include <string.h>
 #include "ads111x.h"
 
-#define I2C_FREQ_HZ 100000 // Max 1MHz for esp32
+#define I2C_FREQ_HZ 1000000 // Max 1MHz for esp32
 
 #define REG_CONVERSION 0
 #define REG_CONFIG     1
@@ -154,7 +154,6 @@ static esp_err_t write_conf_bits(i2c_dev_t *dev, uint16_t val, uint8_t offs,
         uint16_t bits; \
         CHECK(read_conf_bits(&dev->i2c_dev, OFFS, MASK, &bits)); \
         *VAR = bits; \
-        return ESP_OK; \
     } while(0)
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -232,101 +231,157 @@ esp_err_t ads101x_get_value(ads111x_t *dev, int16_t *value)
     return ESP_OK;
 }
 
-esp_err_t ads111x_get_gain(ads111x_t *dev)
+esp_err_t ads111x_get_gain(ads111x_t *dev, ads111x_gain_t *gain)
 {
+    CHECK_ARG(dev && gain);
     READ_CONFIG(PGA_OFFSET, PGA_MASK, &dev->gain);
+    *gain = dev->gain;
+    return ESP_OK;
 }
 
 esp_err_t ads111x_set_gain(ads111x_t *dev, ads111x_gain_t gain)
 {
+    CHECK_ARG(dev);
+    
+    CHECK(write_conf_bits(&dev->i2c_dev, gain, PGA_OFFSET, PGA_MASK));
     dev->gain = gain;
-    return write_conf_bits(&dev->i2c_dev, dev->gain, PGA_OFFSET, PGA_MASK);
+    return ESP_OK;
 }
 
-esp_err_t ads111x_get_input_mux(ads111x_t *dev)
+esp_err_t ads111x_get_input_mux(ads111x_t *dev, ads111x_mux_t *mux)
 {
+    CHECK_ARG(dev && mux);
+
     READ_CONFIG(MUX_OFFSET, MUX_MASK, &dev->mux);
+    *mux = dev->mux;
+    return ESP_OK;
 }
 
 esp_err_t ads111x_set_input_mux(ads111x_t *dev, ads111x_mux_t mux)
 {
+    CHECK_ARG(dev);
+    
+    CHECK(write_conf_bits(&dev->i2c_dev, mux, MUX_OFFSET, MUX_MASK));
     dev->mux = mux;
-    return write_conf_bits(&dev->i2c_dev, dev->mux, MUX_OFFSET, MUX_MASK);
+    return ESP_OK;
 }
 
-esp_err_t ads111x_get_mode(ads111x_t *dev)
+esp_err_t ads111x_get_mode(ads111x_t *dev, ads111x_mode_t *mode)
 {
+    CHECK_ARG(dev && mode);
+
     READ_CONFIG(MODE_OFFSET, MODE_MASK, &dev->mode);
+    *mode = dev->mode;
+    return ESP_OK;
 }
 
 esp_err_t ads111x_set_mode(ads111x_t *dev, ads111x_mode_t mode)
 {
+    CHECK_ARG(dev);
+
+    CHECK(write_conf_bits(&dev->i2c_dev, mode, MODE_OFFSET, MODE_MASK));
     dev->mode = mode;
-    return write_conf_bits(&dev->i2c_dev, dev->mode, MODE_OFFSET, MODE_MASK);
+    return ESP_OK;
 }
 
-esp_err_t ads111x_get_data_rate(ads111x_t *dev)
+esp_err_t ads111x_get_data_rate(ads111x_t *dev, ads111x_data_rate_t *rate)
 {
+    CHECK_ARG(dev && rate);
+
     READ_CONFIG(DR_OFFSET, DR_MASK, &dev->data_rate);
+    *rate = dev->data_rate;
+    return ESP_OK;
 }
 
 esp_err_t ads111x_set_data_rate(ads111x_t *dev, ads111x_data_rate_t rate)
 {
+    CHECK_ARG(dev);
+
+    CHECK(write_conf_bits(&dev->i2c_dev, rate, DR_OFFSET, DR_MASK));
     dev->data_rate = rate;
-    return write_conf_bits(&dev->i2c_dev, dev->data_rate, DR_OFFSET, DR_MASK);
+    return ESP_OK;
 }
 
-esp_err_t ads111x_get_comp_mode(ads111x_t *dev)
+esp_err_t ads111x_get_comp_mode(ads111x_t *dev, ads111x_comp_mode_t *mode)
 {
+    CHECK_ARG(dev && mode);
+
     READ_CONFIG(COMP_MODE_OFFSET, COMP_MODE_MASK, &dev->comp_mode);
+    *mode = dev->comp_mode;
+    return ESP_OK;
 }
 
 esp_err_t ads111x_set_comp_mode(ads111x_t *dev, ads111x_comp_mode_t mode)
 {
+    CHECK_ARG(dev);
+
+    CHECK(write_conf_bits(&dev->i2c_dev, mode, COMP_MODE_OFFSET, COMP_MODE_MASK));
     dev->comp_mode = mode;
-    return write_conf_bits(&dev->i2c_dev, dev->comp_mode, COMP_MODE_OFFSET, COMP_MODE_MASK);
+    return ESP_OK;
 }
 
-esp_err_t ads111x_get_comp_polarity(ads111x_t *dev)
+esp_err_t ads111x_get_comp_polarity(ads111x_t *dev, ads111x_comp_polarity_t *polarity)
 {
+    CHECK_ARG(dev && polarity);
+
     READ_CONFIG(COMP_POL_OFFSET, COMP_POL_MASK, &dev->comp_polarity);
+    *polarity = dev->comp_polarity;
+    return ESP_OK;
 }
 
 esp_err_t ads111x_set_comp_polarity(ads111x_t *dev, ads111x_comp_polarity_t polarity)
 {
+    CHECK_ARG(dev);
+
+    CHECK(write_conf_bits(&dev->i2c_dev, polarity, COMP_POL_OFFSET, COMP_POL_MASK));
     dev->comp_polarity = polarity;
-    return write_conf_bits(&dev->i2c_dev, dev->comp_polarity, COMP_POL_OFFSET, COMP_POL_MASK);
+    return ESP_OK;
 }
 
-esp_err_t ads111x_get_comp_latch(ads111x_t *dev)
+esp_err_t ads111x_get_comp_latch(ads111x_t *dev, ads111x_comp_latch_t *latch)
 {
+    CHECK_ARG(dev && latch);
+
     READ_CONFIG(COMP_LAT_OFFSET, COMP_LAT_MASK, &dev->comp_latch);
+    *latch = dev->comp_latch;
+    return ESP_OK;
 }
 
 esp_err_t ads111x_set_comp_latch(ads111x_t *dev, ads111x_comp_latch_t latch)
 {
+    CHECK_ARG(dev);
+    
+    CHECK(write_conf_bits(&dev->i2c_dev, latch, COMP_LAT_OFFSET, COMP_LAT_MASK));
     dev->comp_latch = latch;
-    return write_conf_bits(&dev->i2c_dev, dev->comp_latch, COMP_LAT_OFFSET, COMP_LAT_MASK);
+    return ESP_OK;
 }
 
-esp_err_t ads111x_get_comp_queue(ads111x_t *dev)
+esp_err_t ads111x_get_comp_queue(ads111x_t *dev, ads111x_comp_queue_t *queue)
 {
+    CHECK_ARG(dev && queue);
+
     READ_CONFIG(COMP_QUE_OFFSET, COMP_QUE_MASK, &dev->comp_queue);
+    *queue = dev->comp_queue;
+    return ESP_OK;
 }
 
 esp_err_t ads111x_set_comp_queue(ads111x_t *dev, ads111x_comp_queue_t queue)
 {
+    CHECK_ARG(dev);
+
+    CHECK(write_conf_bits(&dev->i2c_dev, queue, COMP_QUE_OFFSET, COMP_QUE_MASK));
     dev->comp_queue = queue;
-    return write_conf_bits(&dev->i2c_dev, dev->comp_queue, COMP_QUE_OFFSET, COMP_QUE_MASK);
+    return ESP_OK;
 }
 
-esp_err_t ads111x_get_comp_low_thresh(ads111x_t *dev)
+esp_err_t ads111x_get_comp_low_thresh(ads111x_t *dev, int16_t *th)
 {
-    CHECK_ARG(dev);
+    CHECK_ARG(dev && th);
 
     I2C_DEV_TAKE_MUTEX(&dev->i2c_dev);
     I2C_DEV_CHECK(&dev->i2c_dev, read_reg(&dev->i2c_dev, REG_THRESH_L, (uint16_t *)&dev->low_th));
     I2C_DEV_GIVE_MUTEX(&dev->i2c_dev);
+    *th = dev->low_th;
 
     return ESP_OK;
 }
@@ -335,21 +390,22 @@ esp_err_t ads111x_set_comp_low_thresh(ads111x_t *dev, int16_t th)
 {
     CHECK_ARG(dev);
 
-    dev->low_th = th;
     I2C_DEV_TAKE_MUTEX(&dev->i2c_dev);
-    I2C_DEV_CHECK(&dev->i2c_dev, write_reg(&dev->i2c_dev, REG_THRESH_L, dev->low_th));
+    I2C_DEV_CHECK(&dev->i2c_dev, write_reg(&dev->i2c_dev, REG_THRESH_L, th));
     I2C_DEV_GIVE_MUTEX(&dev->i2c_dev);
+    dev->low_th = th;
 
     return ESP_OK;
 }
 
-esp_err_t ads111x_get_comp_high_thresh(ads111x_t *dev)
+esp_err_t ads111x_get_comp_high_thresh(ads111x_t *dev, int16_t *th)
 {
-    CHECK_ARG(dev);
+    CHECK_ARG(dev && th);
 
     I2C_DEV_TAKE_MUTEX(&dev->i2c_dev);
     I2C_DEV_CHECK(&dev->i2c_dev, read_reg(&dev->i2c_dev, REG_THRESH_H, (uint16_t *)&dev->high_th));
     I2C_DEV_GIVE_MUTEX(&dev->i2c_dev);
+    *th = dev->high_th;
 
     return ESP_OK;
 }
@@ -358,10 +414,10 @@ esp_err_t ads111x_set_comp_high_thresh(ads111x_t *dev, int16_t th)
 {
     CHECK_ARG(dev);
 
-    dev->high_th = th;
     I2C_DEV_TAKE_MUTEX(&dev->i2c_dev);
-    I2C_DEV_CHECK(&dev->i2c_dev, write_reg(&dev->i2c_dev, REG_THRESH_H, dev->high_th));
+    I2C_DEV_CHECK(&dev->i2c_dev, write_reg(&dev->i2c_dev, REG_THRESH_H, th));
     I2C_DEV_GIVE_MUTEX(&dev->i2c_dev);
+    dev->high_th = th;
 
     return ESP_OK;
 }

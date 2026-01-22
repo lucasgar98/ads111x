@@ -249,9 +249,10 @@ esp_err_t ads101x_get_value(ads111x_t *dev, int16_t *value);
  * Use ::ads111x_gain_values[] for real voltage.
  *
  * @param dev Device descriptor
+ * @param[out] gain Gain value
  * @return `ESP_OK` on success
  */
-esp_err_t ads111x_get_gain(ads111x_t *dev);
+esp_err_t ads111x_get_gain(ads111x_t *dev, ads111x_gain_t *gain);
 
 /**
  * @brief Configure the programmable gain amplifier
@@ -270,9 +271,10 @@ esp_err_t ads111x_set_gain(ads111x_t *dev, ads111x_gain_t gain);
  * ADS1115 only.
  *
  * @param dev Device descriptor
+ * @param[out] mux Input multiplexer configuration
  * @return `ESP_OK` on success
  */
-esp_err_t ads111x_get_input_mux(ads111x_t *dev);
+esp_err_t ads111x_get_input_mux(ads111x_t *dev, ads111x_mux_t *mux);
 
 /**
  * @brief Configure the input multiplexer configuration
@@ -289,9 +291,10 @@ esp_err_t ads111x_set_input_mux(ads111x_t *dev, ads111x_mux_t mux);
  * @brief Read the device operating mode
  *
  * @param dev Device descriptor
+ * @param[out] mode Device operating mode
  * @return `ESP_OK` on success
  */
-esp_err_t ads111x_get_mode(ads111x_t *dev);
+esp_err_t ads111x_get_mode(ads111x_t *dev, ads111x_mode_t *mode);
 
 /**
  * @brief Set the device operating mode
@@ -306,9 +309,10 @@ esp_err_t ads111x_set_mode(ads111x_t *dev, ads111x_mode_t mode);
  * @brief Read the data rate
  *
  * @param dev Device descriptor
+ * @param[out] rate Data rate
  * @return `ESP_OK` on success
  */
-esp_err_t ads111x_get_data_rate(ads111x_t *dev);
+esp_err_t ads111x_get_data_rate(ads111x_t *dev, ads111x_data_rate_t *rate);
 
 /**
  * @brief Configure the data rate
@@ -325,9 +329,10 @@ esp_err_t ads111x_set_data_rate(ads111x_t *dev, ads111x_data_rate_t rate);
  * ADS1114 and ADS1115 only.
  *
  * @param dev Device descriptor
+ * @param[out] mode Comparator mode
  * @return `ESP_OK` on success
  */
-esp_err_t ads111x_get_comp_mode(ads111x_t *dev);
+esp_err_t ads111x_get_comp_mode(ads111x_t *dev, ads111x_comp_mode_t *mode);
 
 /**
  * @brief Set comparator mode
@@ -346,9 +351,10 @@ esp_err_t ads111x_set_comp_mode(ads111x_t *dev, ads111x_comp_mode_t mode);
  * ADS1114 and ADS1115 only.
  *
  * @param dev Device descriptor
+ * @param[out] polarity Comparator output pin polarity
  * @return `ESP_OK` on success
  */
-esp_err_t ads111x_get_comp_polarity(ads111x_t *dev);
+esp_err_t ads111x_get_comp_polarity(ads111x_t *dev, ads111x_comp_polarity_t *polarity);
 
 /**
  * @brief Set polarity of the comparator output pin ALERT/RDY
@@ -367,9 +373,10 @@ esp_err_t ads111x_set_comp_polarity(ads111x_t *dev, ads111x_comp_polarity_t pola
  * ADS1114 and ADS1115 only.
  *
  * @param dev Device descriptor
+ * @param[out] latch Comparator output latch mode
  * @return `ESP_OK` on success
  */
-esp_err_t ads111x_get_comp_latch(ads111x_t *dev);
+esp_err_t ads111x_get_comp_latch(ads111x_t *dev, ads111x_comp_latch_t *latch);
 
 /**
  * @brief Set comparator output latch mode
@@ -389,9 +396,10 @@ esp_err_t ads111x_set_comp_latch(ads111x_t *dev, ads111x_comp_latch_t latch);
  * assertion. ADS1114 and ADS1115 only.
  *
  * @param dev Device descriptor
+ * @param[out] queue Number of the comparator conversions
  * @return `ESP_OK` on success
  */
-esp_err_t ads111x_get_comp_queue(ads111x_t *dev);
+esp_err_t ads111x_get_comp_queue(ads111x_t *dev, ads111x_comp_queue_t *queue);
 
 /**
  * @brief Set comparator queue size
@@ -409,9 +417,10 @@ esp_err_t ads111x_set_comp_queue(ads111x_t *dev, ads111x_comp_queue_t queue);
  * @brief Get the lower threshold value used by comparator
  *
  * @param dev Device descriptor
+ * @param[out] th Lower threshold value
  * @return `ESP_OK` on success
  */
-esp_err_t ads111x_get_comp_low_thresh(ads111x_t *dev);
+esp_err_t ads111x_get_comp_low_thresh(ads111x_t *dev, int16_t *th);
 
 /**
  * @brief Set the lower threshold value used by comparator
@@ -426,9 +435,10 @@ esp_err_t ads111x_set_comp_low_thresh(ads111x_t *dev, int16_t th);
  * @brief Get the upper threshold value used by comparator
  *
  * @param dev Device descriptor
+ * @param[out] th Upper threshold value
  * @return `ESP_OK` on success
  */
-esp_err_t ads111x_get_comp_high_thresh(ads111x_t *dev);
+esp_err_t ads111x_get_comp_high_thresh(ads111x_t *dev, int16_t *th);
 
 /**
  * @brief Set the upper threshold value used by comparator
