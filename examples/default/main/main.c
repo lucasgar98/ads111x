@@ -20,7 +20,8 @@ static const uint8_t addr[CONFIG_EXAMPLE_DEV_COUNT] =
 };
 
 // Descriptors
-static i2c_dev_t devices[CONFIG_EXAMPLE_DEV_COUNT];
+// static i2c_dev_t devices[CONFIG_EXAMPLE_DEV_COUNT];
+static ads111x_t devices[CONFIG_EXAMPLE_DEV_COUNT];
 
 // Gain value
 static float gain_val;
