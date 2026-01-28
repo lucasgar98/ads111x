@@ -75,7 +75,8 @@
 
 static const char *TAG = "ads111x";
 
-const float ads111x_gain_values[] = {
+const float ads111x_gain_values[] =
+{
     [ADS111X_GAIN_6V144]   = 6.144,
     [ADS111X_GAIN_4V096]   = 4.096,
     [ADS111X_GAIN_2V048]   = 2.048,
@@ -114,7 +115,7 @@ static esp_err_t write_reg(i2c_dev_t *dev, uint8_t reg, uint16_t val)
 }
 
 static esp_err_t read_conf_bits(i2c_dev_t *dev, uint8_t offs, uint16_t mask,
-        uint16_t *bits)
+                                uint16_t *bits)
 {
     CHECK_ARG(dev);
 
@@ -132,7 +133,7 @@ static esp_err_t read_conf_bits(i2c_dev_t *dev, uint8_t offs, uint16_t mask,
 }
 
 static esp_err_t write_conf_bits(i2c_dev_t *dev, uint16_t val, uint8_t offs,
-        uint16_t mask)
+                                 uint16_t mask)
 {
     CHECK_ARG(dev);
 
@@ -159,7 +160,7 @@ static esp_err_t write_conf_bits(i2c_dev_t *dev, uint16_t val, uint8_t offs,
 ///////////////////////////////////////////////////////////////////////////////
 
 esp_err_t ads111x_init_desc(ads111x_t *dev, uint8_t addr, i2c_port_t port,
-        gpio_num_t sda_gpio, gpio_num_t scl_gpio)
+                            gpio_num_t sda_gpio, gpio_num_t scl_gpio)
 {
     CHECK_ARG(dev);
 
@@ -242,7 +243,7 @@ esp_err_t ads111x_get_gain(ads111x_t *dev, ads111x_gain_t *gain)
 esp_err_t ads111x_set_gain(ads111x_t *dev, ads111x_gain_t gain)
 {
     CHECK_ARG(dev);
-    
+
     CHECK(write_conf_bits(&dev->i2c_dev, gain, PGA_OFFSET, PGA_MASK));
     dev->gain = gain;
     return ESP_OK;
@@ -260,7 +261,7 @@ esp_err_t ads111x_get_input_mux(ads111x_t *dev, ads111x_mux_t *mux)
 esp_err_t ads111x_set_input_mux(ads111x_t *dev, ads111x_mux_t mux)
 {
     CHECK_ARG(dev);
-    
+
     CHECK(write_conf_bits(&dev->i2c_dev, mux, MUX_OFFSET, MUX_MASK));
     dev->mux = mux;
     return ESP_OK;
@@ -350,7 +351,7 @@ esp_err_t ads111x_get_comp_latch(ads111x_t *dev, ads111x_comp_latch_t *latch)
 esp_err_t ads111x_set_comp_latch(ads111x_t *dev, ads111x_comp_latch_t latch)
 {
     CHECK_ARG(dev);
-    
+
     CHECK(write_conf_bits(&dev->i2c_dev, latch, COMP_LAT_OFFSET, COMP_LAT_MASK));
     dev->comp_latch = latch;
     return ESP_OK;

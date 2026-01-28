@@ -170,7 +170,8 @@ typedef enum
 /**
  * Device descriptor
  */
-typedef struct {
+typedef struct
+{
     i2c_dev_t i2c_dev;
     ads111x_gain_t gain;
     ads111x_mux_t mux;
