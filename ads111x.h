@@ -175,10 +175,11 @@ typedef enum
  * @param port I2C port number
  * @param sda_gpio GPIO pin for SDA
  * @param scl_gpio GPIO pin for SCL
+ * @param clk_speed Clock speed in Hz
  * @return `ESP_OK` on success
  */
 esp_err_t ads111x_init_desc(i2c_dev_t *dev, uint8_t addr, i2c_port_t port,
-                            gpio_num_t sda_gpio, gpio_num_t scl_gpio);
+                            gpio_num_t sda_gpio, gpio_num_t scl_gpio, uint32_t clk_speed);
 
 /**
  * @brief Free device descriptor
