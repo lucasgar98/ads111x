@@ -172,7 +172,7 @@ esp_err_t ads111x_init_desc(i2c_dev_t *dev, uint8_t addr, i2c_port_t port,
         return ESP_ERR_INVALID_ARG;
     }
     // Set to 0 the dev descriptor so that the dev->mutex is created when calling i2c_dev_create_mutex
-    memset(dev, 0, sizeof(dev));
+    memset(dev, 0, sizeof(*dev));
 
     dev->port = port;
     dev->addr = addr;
